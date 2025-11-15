@@ -8,15 +8,28 @@ RUN yum install -y curl unzip
 # Instalar conectores com versões corretas
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:10.7.4
 
-# Instalar Debezium SQL Server connector - versão correta
-RUN confluent-hub install --no-prompt debezium/debezium-connector-sqlserver:2.2.1
+# ====================================================
+# CORREÇÃO PARA DEBEZIUM
+# ====================================================
 
-# Criar diretório para drivers
-RUN mkdir -p /usr/share/confluent-hub-components/confluentinc-kafka-connect-jdbc/lib
+# Baixar e instalar o plugin Debezium SQL Server
+ENV DEBEZIUM_VERSION=2.4.0.Final
+ENV DEBEZIUM_CONNECTORS=debezium-connector-sqlserver
+RUN mkdir -p /usr/share/java/debezium-connector-sqlserver && \
+    curl -fSL "https://repo1.maven.org/maven2/io/debezium/${DEBEZIUM_CONNECTORS}/${DEBEZIUM_VERSION}/${DEBEZIUM_CONNECTORS}-${DEBEZIUM_VERSION}-plugin.tar.gz" \
+    | tar -xzf - -C /usr/share/java/debezium-connector-sqlserver --strip-components 1
 
-# Baixar driver JDBC do SQL Server
-RUN curl -L -o /usr/share/confluent-hub-components/confluentinc-kafka-connect-jdbc/lib/mssql-jdbc-12.2.0.jre11.jar \
-    https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.2.0.jre11/mssql-jdbc-12.2.0.jre11.jar
+# Instalar o driver JDBC do SQL Server (versão corrigida)
+RUN curl -fSL -o /usr/share/java/kafka/mssql-jdbc-12.4.2.jre11.jar \
+    "https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.4.2.jre11/mssql-jdbc-12.4.2.jre11.jar"
+
+# Alternativa: versão mais recente (descomente uma das opções abaixo)
+# RUN curl -fSL -o /usr/share/java/kafka/mssql-jdbc-12.6.1.jre11.jar \
+#     "https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.6.1.jre11/mssql-jdbc-12.6.1.jre11.jar"
+
+# Configurar o classpath para o Kafka Connect
+ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
 
 # Verificar instalação
-RUN ls -la /usr/share/confluent-hub-components/
+RUN ls -la /usr/share/java/debezium-connector-sqlserver/ && \
+    ls -la /usr/share/java/kafka/mssql-jdbc-*.jar
