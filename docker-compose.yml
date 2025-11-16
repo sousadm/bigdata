@@ -1,4 +1,7 @@
 services:
+  # ====================================================
+  # SQLServer database
+  # ===================================================
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
@@ -14,6 +17,9 @@ services:
     networks:
       - bigdata-net
 
+  # ====================================================
+  # PostgreSQL
+  # ====================================================
   postgresql:
     image: postgres:15
     container_name: postgresql
@@ -31,6 +37,38 @@ services:
     networks:
       - bigdata-net
 
+  # ==========================
+  # CLICKHOUSE (Configuração Corrigida)
+  # =======================
+  clickhouse:
+    build:
+      context: .
+      dockerfile: Dockerfile-clickhouse-odbc
+    container_name: clickhouse
+    restart: unless-stopped
+    ports:
+      - "8123:8123"
+      - "9000:9000"
+    volumes:
+      - clickhouse_data:/var/lib/clickhouse
+    environment:
+      CLICKHOUSE_USER: admin
+      CLICKHOUSE_PASSWORD: admin123
+      CLICKHOUSE_DB: default
+      TZ: America/Sao_Paulo
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 0
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    depends_on:
+      - sqlserver
+    networks:
+      - bigdata-net
+
+  # ==========================
+  # KAFKA (deve iniciar primeiro)
+  # ==========================
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
@@ -74,32 +112,9 @@ services:
     networks:
       - bigdata-net
 
-  clickhouse:
-    build:
-      context: .
-      dockerfile: Dockerfile-clickhouse-odbc
-    container_name: clickhouse
-    restart: unless-stopped
-    ports:
-      - "8123:8123"
-      - "9000:9000"
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse
-    environment:
-      CLICKHOUSE_USER: admin
-      CLICKHOUSE_PASSWORD: admin123
-      CLICKHOUSE_DB: default
-      TZ: America/Sao_Paulo
-      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 0
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
-    depends_on:
-      - sqlserver
-    networks:
-      - bigdata-net
-
+  # ==========================
+  # KAFKA CONNECT (para CDC do SQL Server)
+  # ==========================
   kafka-connect:
     build:
       context: .  
@@ -132,6 +147,9 @@ services:
     networks:
       - bigdata-net
 
+  # ==========================
+  # KAFKA UI (Opcional - para monitoramento)
+  # ==========================
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui
