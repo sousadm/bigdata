@@ -2,34 +2,37 @@ FROM clickhouse/clickhouse-server:23.8
 
 USER root
 
-# Instalar dependências ODBC
+# Instalar dependências básicas
 RUN apt-get update && \
-    apt-get install -y \
-    unixodbc \
-    unixodbc-dev \
-    odbcinst \
-    curl \
-    gnupg2 \
-    apt-transport-https \
-    unixodbc-bin \
-    && rm -rf /var/lib/apt/lists/*
+    apt-get install -y curl gnupg2 wget
 
-# Instalar Microsoft ODBC Driver 18 for SQL Server
+# Adicionar repositório Microsoft
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list && \
-    apt-get update && \
-    ACCEPT_EULA=Y apt-get install -y msodbcsql18 && \
-    rm -rf /var/lib/apt/lists/*
+    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
 
-# Copiar arquivos de configuração ODBC
+# Instalar dependência de SSL manualmente (libssl1.1 para Ubuntu 20.04/Focal )
+# O link é estável, mas a versão pode ser antiga. O apt --fix-broken resolverá o conflito.
+RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb && \
+    dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb && \
+    rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb
+
+# CORREÇÃO: Forçar a resolução de dependências quebradas
+RUN apt-get update && apt-get install -f -y
+
+# Instalar o driver ODBC e o unixODBC
+RUN apt-get update && \
+    ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc unixodbc-dev gawk
+
+# Verificar arquivos instalados
+RUN echo "=== Arquivos ODBC instalados ===" && \
+    find /opt/microsoft/msodbcsql18 -name "*.so*" -type f
+
+# Copiar configurações
 COPY odbc.ini /etc/odbc.ini
 COPY odbcinst.ini /etc/odbcinst.ini
 
-# Verificar instalação
-RUN odbcinst -j && \
-    cat /etc/odbcinst.ini && \
-    cat /etc/odbc.ini
+# Ajustar permissões
+RUN chmod 644 /etc/odbc.ini /etc/odbcinst.ini
 
 USER clickhouse
 
-EXPOSE 8123 9000
