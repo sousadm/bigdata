@@ -12,7 +12,7 @@ docker-compose build --no-cache clickhouse
 docker-compose up -d clickhouse sqlserver
 
 echo "Aguardando inicialização..."
-sleep 90
+sleep 30
 
 echo "=== Verificando instalação ODBC no container ==="
 docker exec clickhouse bash -c "
