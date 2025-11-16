@@ -1,7 +1,4 @@
 services:
-  # ====================================================
-  # SQLServer database
-  # ===================================================
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
@@ -14,10 +11,9 @@ services:
     volumes:
       - sqlserver_data:/var/opt/mssql
       - ./backup:/var/backup
+    networks:
+      - bigdata-net
 
-  # ====================================================
-  # PostgreSQL
-  # ====================================================
   postgresql:
     image: postgres:15
     container_name: postgresql
@@ -32,10 +28,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgresql:/docker-entrypoint-initdb.d
+    networks:
+      - bigdata-net
 
-  # ==========================
-  # KAFKA (deve iniciar primeiro)
-  # ==========================
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
@@ -79,14 +74,10 @@ services:
     networks:
       - bigdata-net
 
-  # ==========================
-  # CLICKHOUSE (Configuração Corrigida)
-  # ==========================
   clickhouse:
     build:
       context: .
       dockerfile: Dockerfile-clickhouse-odbc
-    image: clickhouse/clickhouse-server:23.8
     container_name: clickhouse
     restart: unless-stopped
     ports:
@@ -95,23 +86,20 @@ services:
     volumes:
       - clickhouse_data:/var/lib/clickhouse
     environment:
-      #CLICKHOUSE_USER: admin
-      #CLICKHOUSE_PASSWORD: admin123
+      CLICKHOUSE_USER: admin
+      CLICKHOUSE_PASSWORD: admin123
       CLICKHOUSE_DB: default
       TZ: America/Sao_Paulo
-      CLICKHOUSE_USER: default
-      CLICKHOUSE_PASSWORD: admin123
-      #CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 0
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 0
     ulimits:
       nofile:
         soft: 262144
         hard: 262144
+    depends_on:
+      - sqlserver
     networks:
       - bigdata-net
 
-  # ==========================
-  # KAFKA CONNECT (para CDC do SQL Server)
-  # ==========================
   kafka-connect:
     build:
       context: .  
@@ -144,9 +132,6 @@ services:
     networks:
       - bigdata-net
 
-  # ==========================
-  # KAFKA UI (Opcional - para monitoramento)
-  # ==========================
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     container_name: kafka-ui

@@ -53,4 +53,14 @@ COPY odbcinst.ini /etc/odbcinst.ini
 RUN chmod 644 /etc/odbc.ini /etc/odbcinst.ini && \
     chown clickhouse:clickhouse /etc/odbc.ini /etc/odbcinst.ini
 
+# Adicionar mssql-tools ao PATH permanentemente
+ENV PATH="/opt/mssql-tools18/bin:${PATH}"
+
+# Configurar PATH no bashrc para sessões interativas
+RUN echo 'export PATH=$PATH:/opt/mssql-tools18/bin' >> /etc/bash.bashrc && \
+    echo 'export PATH=$PATH:/opt/mssql-tools18/bin' >> /root/.bashrc && \
+    mkdir -p /home/clickhouse && \
+    echo 'export PATH=$PATH:/opt/mssql-tools18/bin' >> /home/clickhouse/.bashrc && \
+    chown -R clickhouse:clickhouse /home/clickhouse
+
 USER clickhouse
