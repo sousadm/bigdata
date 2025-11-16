@@ -2,37 +2,55 @@ FROM clickhouse/clickhouse-server:23.8
 
 USER root
 
-# Instalar dependências básicas
-RUN apt-get update && \
-    apt-get install -y curl gnupg2 wget
+# Limpar cache e instalar dependências básicas
+RUN apt-get clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    curl \
+    gnupg2 \
+    wget \
+    ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
 
 # Adicionar repositório Microsoft
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
-    curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
+RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
+    curl -fsSL https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list
 
-# Instalar dependência de SSL manualmente (libssl1.1 para Ubuntu 20.04/Focal )
-# O link é estável, mas a versão pode ser antiga. O apt --fix-broken resolverá o conflito.
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb && \
-    dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb && \
-    rm libssl1.1_1.1.1f-1ubuntu2_amd64.deb
-
-# CORREÇÃO: Forçar a resolução de dependências quebradas
-RUN apt-get update && apt-get install -f -y
-
-# Instalar o driver ODBC e o unixODBC
+# Instalar libssl1.1 (compatibilidade)
 RUN apt-get update && \
-    ACCEPT_EULA=Y apt-get install -y msodbcsql18 unixodbc unixodbc-dev gawk
+    apt-get install -y --no-install-recommends \
+    libssl1.1 || \
+    (wget -q http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb && \
+     dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb && \
+     rm -f libssl1.1_1.1.1f-1ubuntu2_amd64.deb) && \
+    rm -rf /var/lib/apt/lists/*
 
-# Verificar arquivos instalados
+# Resolver dependências quebradas
+RUN apt-get update && \
+    apt-get install -f -y && \
+    rm -rf /var/lib/apt/lists/*
+
+# Instalar ODBC Driver e ferramentas
+RUN apt-get update && \
+    ACCEPT_EULA=Y apt-get install -y --no-install-recommends \
+    msodbcsql18 \
+    mssql-tools18 \
+    unixodbc \
+    unixodbc-dev \
+    gawk && \
+    rm -rf /var/lib/apt/lists/*
+
+# Verificar instalação
 RUN echo "=== Arquivos ODBC instalados ===" && \
-    find /opt/microsoft/msodbcsql18 -name "*.so*" -type f
+    find /opt/microsoft/msodbcsql18 -name "*.so*" -type f 2>/dev/null || echo "Nenhum arquivo encontrado"
 
-# Copiar configurações
+# Copiar configurações ODBC
 COPY odbc.ini /etc/odbc.ini
 COPY odbcinst.ini /etc/odbcinst.ini
 
 # Ajustar permissões
-RUN chmod 644 /etc/odbc.ini /etc/odbcinst.ini
+RUN chmod 644 /etc/odbc.ini /etc/odbcinst.ini && \
+    chown clickhouse:clickhouse /etc/odbc.ini /etc/odbcinst.ini
 
 USER clickhouse
-

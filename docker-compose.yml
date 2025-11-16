@@ -3,9 +3,6 @@ services:
   # SQLServer database
   # ===================================================
   sqlserver:
-    build:
-      context: .
-      dockerfile: Dockerfile-sqlserver-tools
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: sqlserver
     restart: unless-stopped
@@ -17,8 +14,6 @@ services:
     volumes:
       - sqlserver_data:/var/opt/mssql
       - ./backup:/var/backup
-    networks:
-      - bigdata-net
 
   # ====================================================
   # PostgreSQL
@@ -37,8 +32,6 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgresql:/docker-entrypoint-initdb.d
-    networks:
-      - bigdata-net
 
   # ==========================
   # KAFKA (deve iniciar primeiro)
@@ -102,10 +95,13 @@ services:
     volumes:
       - clickhouse_data:/var/lib/clickhouse
     environment:
-      CLICKHOUSE_USER: default
-      CLICKHOUSE_PASSWORD: admin123
+      #CLICKHOUSE_USER: admin
+      #CLICKHOUSE_PASSWORD: admin123
       CLICKHOUSE_DB: default
       TZ: America/Sao_Paulo
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: admin123
+      #CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 0
     ulimits:
       nofile:
         soft: 262144
@@ -173,3 +169,4 @@ volumes:
 
 networks:
   bigdata-net:
+    driver: bridge
