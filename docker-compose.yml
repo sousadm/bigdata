@@ -8,12 +8,14 @@ services:
     restart: unless-stopped
     environment:
       - ACCEPT_EULA=Y
-      - MSSQL_SA_PASSWORD=@dmin123
+      - MSSQL_SA_PASSWORD=@Admin123
     ports:
       - "1433:1433"
     volumes:
       - sqlserver_data:/var/opt/mssql
       - ./backup:/var/backup
+    networks:
+      - bigdata-net
 
   # ====================================================
   # PostgreSQL
@@ -32,6 +34,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - ./postgresql:/docker-entrypoint-initdb.d
+    networks:
+      - bigdata-net
 
   # ==========================
   # KAFKA (deve iniciar primeiro)
@@ -95,13 +99,10 @@ services:
     volumes:
       - clickhouse_data:/var/lib/clickhouse
     environment:
-      CLICKHOUSE_USER: admin
+      CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: admin123
       CLICKHOUSE_DB: default
       TZ: America/Sao_Paulo
-      #CLICKHOUSE_USER: default
-      #CLICKHOUSE_PASSWORD: ""
-      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 0
     ulimits:
       nofile:
         soft: 262144
