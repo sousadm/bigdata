@@ -83,6 +83,9 @@ services:
   # CLICKHOUSE (Configuração Corrigida)
   # ==========================
   clickhouse:
+    build:
+      context: .
+      dockerfile: Dockerfile-clickhouse-odbc
     image: clickhouse/clickhouse-server:23.8
     container_name: clickhouse
     restart: unless-stopped
