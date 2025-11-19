@@ -48,6 +48,8 @@ RUN echo "=== Arquivos ODBC instalados ===" && \
 # Copiar configurações ODBC
 COPY odbc.ini /etc/odbc.ini
 COPY odbcinst.ini /etc/odbcinst.ini
+COPY odbc.xml /etc/clickhouse-server/config.d/odbc.xml
+COPY odbc_bridge.xml /etc/clickhouse-server/config.d/odbc_bridge.xml
 
 # Ajustar permissões
 RUN chmod 644 /etc/odbc.ini /etc/odbcinst.ini && \

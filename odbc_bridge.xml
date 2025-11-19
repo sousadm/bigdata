@@ -1,0 +1,12 @@
+<clickhouse>
+    <odbc_bridge>
+        <odbc_connection_pools>
+            <SQLServerPool>
+                <connection_string>DSN=SQLServer;UID=sa;PWD=Admin.Server.2025;TrustServerCertificate=yes;Encrypt=no</connection_string>
+            </SQLServerPool>
+        </odbc_connection_pools>
+        <host>127.0.0.1</host>
+        <port>9018</port>
+        <timeout>300</timeout>
+    </odbc_bridge>
+</clickhouse>

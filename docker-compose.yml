@@ -49,8 +49,11 @@ services:
     ports:
       - "8123:8123"
       - "9000:9000"
+      - "9018:9018"  # Porta do ODBC Bridge
     volumes:
       - clickhouse_data:/var/lib/clickhouse
+      #- ./clickhouse-config:/etc/clickhouse-server/config.d:ro
+      #- ./clickhouse-logs:/var/log/clickhouse-server  # Para ver logs facilmente
     environment:
       CLICKHOUSE_USER: admin
       CLICKHOUSE_PASSWORD: admin123
