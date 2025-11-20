@@ -1,0 +1,20 @@
+{
+    "name": "clickhouse-sink-connector",
+    "config": {
+        "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
+        "tasks.max": "1",
+        "topics": "meu_topico_teste",
+        "hostname": "clickhouse",
+        "port": "8123",
+        "database": "default",
+        "username": "admin",
+        "password": "admin123",
+        "ssl": "false",
+        "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "value.converter.schemas.enable": "false",
+        "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+        "key.converter.schemas.enable": "false",
+        "errors.tolerance": "all",
+        "errors.log.enable": "true"
+    }
+}
