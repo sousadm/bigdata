@@ -5,31 +5,38 @@ USER root
 # Instalar curl e unzip
 RUN yum install -y curl unzip
 
-# Instalar conectores com versões corretas
+# Instalar conectores JDBC
 RUN confluent-hub install --no-prompt confluentinc/kafka-connect-jdbc:10.7.4
 
 # ====================================================
-# CORREÇÃO PARA DEBEZIUM
+# DEBEZIUM SQL SERVER
 # ====================================================
-
-# Baixar e instalar o plugin Debezium SQL Server
 ENV DEBEZIUM_VERSION=2.4.0.Final
 ENV DEBEZIUM_CONNECTORS=debezium-connector-sqlserver
 RUN mkdir -p /usr/share/java/debezium-connector-sqlserver && \
     curl -fSL "https://repo1.maven.org/maven2/io/debezium/${DEBEZIUM_CONNECTORS}/${DEBEZIUM_VERSION}/${DEBEZIUM_CONNECTORS}-${DEBEZIUM_VERSION}-plugin.tar.gz" \
     | tar -xzf - -C /usr/share/java/debezium-connector-sqlserver --strip-components 1
 
-# Instalar o driver JDBC do SQL Server (versão corrigida)
+# Instalar o driver JDBC do SQL Server
 RUN curl -fSL -o /usr/share/java/kafka/mssql-jdbc-12.4.2.jre11.jar \
     "https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.4.2.jre11/mssql-jdbc-12.4.2.jre11.jar"
 
-# Alternativa: versão mais recente (descomente uma das opções abaixo)
-# RUN curl -fSL -o /usr/share/java/kafka/mssql-jdbc-12.6.1.jre11.jar \
-#     "https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/12.6.1.jre11/mssql-jdbc-12.6.1.jre11.jar"
+# ====================================================
+# CLICKHOUSE KAFKA CONNECTOR
+# ====================================================
+ENV CLICKHOUSE_CONNECTOR_VERSION=1.0.7
+RUN mkdir -p /usr/share/java/clickhouse-kafka-connect && \
+    cd /usr/share/java/clickhouse-kafka-connect && \
+    curl -fSL "https://github.com/ClickHouse/clickhouse-kafka-connect/releases/download/v${CLICKHOUSE_CONNECTOR_VERSION}/clickhouse-kafka-connect-v${CLICKHOUSE_CONNECTOR_VERSION}.zip" -o connector.zip && \
+    unzip connector.zip && \
+    rm connector.zip
 
 # Configurar o classpath para o Kafka Connect
 ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
 
 # Verificar instalação
 RUN ls -la /usr/share/java/debezium-connector-sqlserver/ && \
-    ls -la /usr/share/java/kafka/mssql-jdbc-*.jar
+    ls -la /usr/share/java/kafka/mssql-jdbc-*.jar && \
+    ls -la /usr/share/java/clickhouse-kafka-connect/
+
+USER appuser

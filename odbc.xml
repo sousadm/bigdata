@@ -1,12 +1,14 @@
 <clickhouse>
     <odbc_connection_pools>
-        <sqlserver>
-            <connection_string>
-                DSN=sqlserver;
-                UID=sa;
-                PWD=Admin.Server.2025;
-                Database=ASPROD;
-            </connection_string>
-        </sqlserver>
+        <SQLServer>
+            <connection_string>DSN=SQLServer;UID=sa;PWD=Admin.Server.2025;Database=ASPROD</connection_string>
+        </SQLServer>
     </odbc_connection_pools>
+    
+    <odbc_bridge>
+        <host>127.0.0.1</host>
+        <port>9018</port>
+        <timeout>300</timeout>
+        <max_tries>3</max_tries>
+    </odbc_bridge>
 </clickhouse>

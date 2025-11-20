@@ -1,0 +1,9 @@
+<clickhouse>
+    <odbc_connection_pools>
+        <SQLServer>
+            <connection_string>DSN=SQLServer;UID=sa;PWD=Admin.Server.2025;Database=ASPROD;TrustServerCertificate=yes;Encrypt=no</connection_string>
+            <pool_size>10</pool_size>
+            <max_tries>3</max_tries>
+        </SQLServer>
+    </odbc_connection_pools>
+</clickhouse>

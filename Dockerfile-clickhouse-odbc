@@ -10,7 +10,9 @@ RUN apt-get clean && \
     curl \
     gnupg2 \
     wget \
-    ca-certificates && \
+    ca-certificates \
+    netcat \
+    iputils-ping && \
     rm -rf /var/lib/apt/lists/*
 
 # Adicionar repositório Microsoft
@@ -42,23 +44,34 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Verificar instalação
-RUN echo "=== Arquivos ODBC instalados ===" && \
+RUN echo "=== Verificando ODBC Driver ===" && \
+    odbcinst -q -d && \
     find /opt/microsoft/msodbcsql18 -name "*.so*" -type f 2>/dev/null || echo "Nenhum arquivo encontrado"
 
 # Copiar configurações ODBC
 COPY odbc.ini /etc/odbc.ini
 COPY odbcinst.ini /etc/odbcinst.ini
 COPY odbc.xml /etc/clickhouse-server/config.d/odbc.xml
-COPY odbc_bridge.xml /etc/clickhouse-server/config.d/odbc_bridge.xml
+COPY odbc_datasources.xml /etc/clickhouse-server/config.d/odbc_datasources.xml
+
+# Criar diretórios necessários
+RUN mkdir -p /var/log/clickhouse-server && \
+    mkdir -p /var/run && \
+    chown -R clickhouse:clickhouse /var/log/clickhouse-server /var/run
 
 # Ajustar permissões
 RUN chmod 644 /etc/odbc.ini /etc/odbcinst.ini && \
-    chown clickhouse:clickhouse /etc/odbc.ini /etc/odbcinst.ini
+    chown clickhouse:clickhouse /etc/odbc.ini /etc/odbcinst.ini && \
+    chown -R clickhouse:clickhouse /etc/clickhouse-server/config.d/
 
-# Adicionar mssql-tools ao PATH permanentemente
+# Adicionar mssql-tools ao PATH
 ENV PATH="/opt/mssql-tools18/bin:${PATH}"
 
-# Configurar PATH no bashrc para sessões interativas
+# Copiar e configurar custom entrypoint
+COPY custom-entrypoint.sh /custom-entrypoint.sh
+RUN chmod +x /custom-entrypoint.sh
+
+# Configurar PATH no bashrc
 RUN echo 'export PATH=$PATH:/opt/mssql-tools18/bin' >> /etc/bash.bashrc && \
     echo 'export PATH=$PATH:/opt/mssql-tools18/bin' >> /root/.bashrc && \
     mkdir -p /home/clickhouse && \
@@ -66,3 +79,6 @@ RUN echo 'export PATH=$PATH:/opt/mssql-tools18/bin' >> /etc/bash.bashrc && \
     chown -R clickhouse:clickhouse /home/clickhouse
 
 USER clickhouse
+
+# Usar o custom entrypoint
+ENTRYPOINT ["/custom-entrypoint.sh"]
