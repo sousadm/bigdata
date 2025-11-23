@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 Data Platform with Docker Compose
 Este projeto fornece uma plataforma de dados completa usando Docker Compose, incluindo bancos de dados SQL Server, PostgreSQL, ClickHouse e uma stack Kafka com ferramentas de conectividade.
 
@@ -637,4 +636,3 @@ docker image prune -a
 ## Licença
 
 Esta infraestrutura utiliza componentes com diferentes licenças. Verifique as licenças individuais de cada componente antes do uso em produção.
->>>>>>> 60bf399 ((alt) documentação)
