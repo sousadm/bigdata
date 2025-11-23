@@ -1,4 +1,7 @@
+#variáveis
+.env 
 
+#pastas
 /backup
 /clickhouse
 /clickhouse-config
