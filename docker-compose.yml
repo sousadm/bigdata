@@ -99,6 +99,9 @@ services:
     networks:
       - bigdata-net
 
+  # ==========================
+  # ZOOKEEPER
+  # ==========================
   zookeeper:
     image: confluentinc/cp-zookeeper:7.4.0
     container_name: zookeeper
@@ -119,11 +122,11 @@ services:
   # CONFLUENT REST PROXY (Novo Serviço para API REST)
   # ==========================
   kafka-rest-proxy:
-    image: confluentinc/cp-kafka-rest:7.4.0
+    image: confluentinc/cp-kafka-rest:latest
     container_name: kafka-rest-proxy
     depends_on:
-      - kafka
-      - zookeeper
+      kafka:
+        condition: service_healthy
     environment:
       KAFKA_REST_HOST_NAME: kafka-rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: kafka:9092
@@ -143,8 +146,8 @@ services:
       dockerfile: Dockerfile-kafka-connect
     container_name: kafka-connect
     depends_on:
-      - kafka
-      - sqlserver
+      kafka:
+        condition: service_healthy
     environment:
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
@@ -177,7 +180,8 @@ services:
     container_name: kafka-ui
     restart: unless-stopped
     depends_on:
-      - kafka
+      kafka:
+        condition: service_healthy
     ports:
       - "8080:8080"
     environment:
