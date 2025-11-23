@@ -1,0 +1,98 @@
+2025-11-21 10:21:09,773 - INFO - 🚀 Iniciando processo ETL...
+2025-11-21 10:21:09,784 - INFO - ✅ Conectado ao SQL Server com sucesso
+2025-11-21 10:21:09,785 - INFO - ✅ Conectado ao ClickHouse com sucesso
+2025-11-21 10:21:09,798 - INFO - ✅ Tabela 'cliente' criada/verificada no ClickHouse
+2025-11-21 10:21:10,616 - INFO - ✅ Extraídos 211596 registros da tabela cliente
+2025-11-21 10:21:10,870 - INFO - ✅ Transformações aplicadas com sucesso
+2025-11-21 10:21:11,545 - INFO - ✅ Dados carregados no ClickHouse: 211596 registros
+2025-11-21 10:21:11,563 - INFO - ✅ Verificação: 211596 registros na tabela cliente do ClickHouse
+2025-11-21 10:21:11,564 - INFO - 🎉 Processo ETL concluído com sucesso!
+2025-11-21 10:21:11,564 - INFO - ⏱️  Duração: 0:00:01.790891
+2025-11-21 10:21:11,564 - INFO - 📊 Total de registros processados: 211596
+2025-11-21 10:32:50,536 - INFO - Iniciando ETL em lote...
+2025-11-21 10:32:50,546 - INFO - Conexão com SQL Server estabelecida
+2025-11-21 10:32:50,547 - INFO - Conexão com ClickHouse estabelecida
+2025-11-21 10:32:50,549 - INFO - Tabela 'dim_cliente' criada/verificada
+2025-11-21 10:32:50,711 - INFO - Total de registros: 211596
+2025-11-21 10:32:50,807 - INFO - Lote extraído: 50000 registros (offset 0)
+2025-11-21 10:32:50,860 - INFO - Transformações aplicadas
+2025-11-21 10:32:51,006 - INFO - Registros carregados: 50000
+2025-11-21 10:32:51,008 - INFO - Acumulado: 50000 registros processados
+2025-11-21 10:32:51,121 - INFO - Lote extraído: 50000 registros (offset 50000)
+2025-11-21 10:32:51,175 - INFO - Transformações aplicadas
+2025-11-21 10:32:51,313 - INFO - Registros carregados: 50000
+2025-11-21 10:32:51,316 - INFO - Acumulado: 100000 registros processados
+2025-11-21 10:32:51,439 - INFO - Lote extraído: 50000 registros (offset 100000)
+2025-11-21 10:32:51,496 - INFO - Transformações aplicadas
+2025-11-21 10:32:51,636 - INFO - Registros carregados: 50000
+2025-11-21 10:32:51,639 - INFO - Acumulado: 150000 registros processados
+2025-11-21 10:32:51,771 - INFO - Lote extraído: 50000 registros (offset 150000)
+2025-11-21 10:32:51,829 - INFO - Transformações aplicadas
+2025-11-21 10:32:51,968 - INFO - Registros carregados: 50000
+2025-11-21 10:32:51,971 - INFO - Acumulado: 200000 registros processados
+2025-11-21 10:32:52,050 - INFO - Lote extraído: 11596 registros (offset 200000)
+2025-11-21 10:32:52,066 - INFO - Transformações aplicadas
+2025-11-21 10:32:52,101 - INFO - Registros carregados: 11596
+2025-11-21 10:32:52,102 - INFO - Acumulado: 211596 registros processados
+2025-11-21 10:32:52,105 - INFO - Verificação: 423192 registros na tabela
+2025-11-21 10:32:52,105 - INFO - ETL em lote concluído em 0:00:01.569237
+2025-11-21 10:32:52,105 - INFO - Total processado no ETL: 211596
+2025-11-21 10:32:52,105 - INFO - Total presente no ClickHouse: 423192
+2025-11-21 10:33:26,932 - INFO - Iniciando ETL em lote...
+2025-11-21 10:33:26,942 - INFO - Conexão com SQL Server estabelecida
+2025-11-21 10:33:26,943 - INFO - Conexão com ClickHouse estabelecida
+2025-11-21 10:33:26,950 - INFO - Tabela 'dim_cliente' criada/verificada
+2025-11-21 10:33:27,063 - INFO - Total de registros: 211596
+2025-11-21 10:33:27,169 - INFO - Lote extraído: 50000 registros (offset 0)
+2025-11-21 10:33:27,224 - INFO - Transformações aplicadas
+2025-11-21 10:33:27,380 - INFO - Registros carregados: 50000
+2025-11-21 10:33:27,383 - INFO - Acumulado: 50000 registros processados
+2025-11-21 10:33:27,503 - INFO - Lote extraído: 50000 registros (offset 50000)
+2025-11-21 10:33:27,559 - INFO - Transformações aplicadas
+2025-11-21 10:33:27,710 - INFO - Registros carregados: 50000
+2025-11-21 10:33:27,712 - INFO - Acumulado: 100000 registros processados
+2025-11-21 10:33:27,849 - INFO - Lote extraído: 50000 registros (offset 100000)
+2025-11-21 10:33:27,908 - INFO - Transformações aplicadas
+2025-11-21 10:33:28,062 - INFO - Registros carregados: 50000
+2025-11-21 10:33:28,065 - INFO - Acumulado: 150000 registros processados
+2025-11-21 10:33:28,210 - INFO - Lote extraído: 50000 registros (offset 150000)
+2025-11-21 10:33:28,270 - INFO - Transformações aplicadas
+2025-11-21 10:33:28,425 - INFO - Registros carregados: 50000
+2025-11-21 10:33:28,428 - INFO - Acumulado: 200000 registros processados
+2025-11-21 10:33:28,505 - INFO - Lote extraído: 11596 registros (offset 200000)
+2025-11-21 10:33:28,519 - INFO - Transformações aplicadas
+2025-11-21 10:33:28,554 - INFO - Registros carregados: 11596
+2025-11-21 10:33:28,555 - INFO - Acumulado: 211596 registros processados
+2025-11-21 10:33:28,557 - INFO - Verificação: 211596 registros na tabela
+2025-11-21 10:33:28,557 - INFO - ETL em lote concluído em 0:00:01.625447
+2025-11-21 10:33:28,557 - INFO - Total processado no ETL: 211596
+2025-11-21 10:33:28,557 - INFO - Total presente no ClickHouse: 211596
+2025-11-21 10:44:56,503 - INFO - Iniciando ETL em lote...
+2025-11-21 10:44:56,513 - INFO - Conexão com SQL Server estabelecida
+2025-11-21 10:44:56,514 - INFO - Conexão com ClickHouse estabelecida
+2025-11-21 10:44:56,520 - INFO - Tabela 'dim_cliente' criada/verificada
+2025-11-21 10:44:56,629 - INFO - Total de registros: 211596
+2025-11-21 10:44:56,741 - INFO - Lote extraído: 50000 registros (offset 0)
+2025-11-21 10:44:56,789 - INFO - Transformações aplicadas
+2025-11-21 10:44:56,928 - INFO - Registros carregados: 50000
+2025-11-21 10:44:56,931 - INFO - Acumulado: 50000 registros processados
+2025-11-21 10:44:57,054 - INFO - Lote extraído: 50000 registros (offset 50000)
+2025-11-21 10:44:57,103 - INFO - Transformações aplicadas
+2025-11-21 10:44:57,236 - INFO - Registros carregados: 50000
+2025-11-21 10:44:57,239 - INFO - Acumulado: 100000 registros processados
+2025-11-21 10:44:57,367 - INFO - Lote extraído: 50000 registros (offset 100000)
+2025-11-21 10:44:57,419 - INFO - Transformações aplicadas
+2025-11-21 10:44:57,556 - INFO - Registros carregados: 50000
+2025-11-21 10:44:57,559 - INFO - Acumulado: 150000 registros processados
+2025-11-21 10:44:57,694 - INFO - Lote extraído: 50000 registros (offset 150000)
+2025-11-21 10:44:57,748 - INFO - Transformações aplicadas
+2025-11-21 10:44:57,886 - INFO - Registros carregados: 50000
+2025-11-21 10:44:57,889 - INFO - Acumulado: 200000 registros processados
+2025-11-21 10:44:57,960 - INFO - Lote extraído: 11596 registros (offset 200000)
+2025-11-21 10:44:57,974 - INFO - Transformações aplicadas
+2025-11-21 10:44:58,005 - INFO - Registros carregados: 11596
+2025-11-21 10:44:58,006 - INFO - Acumulado: 211596 registros processados
+2025-11-21 10:44:58,008 - INFO - Verificação: 211596 registros na tabela
+2025-11-21 10:44:58,008 - INFO - ETL em lote concluído em 0:00:01.505559
+2025-11-21 10:44:58,008 - INFO - Total processado no ETL: 211596
+2025-11-21 10:44:58,008 - INFO - Total presente no ClickHouse: 211596

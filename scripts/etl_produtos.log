@@ -1,0 +1,21 @@
+2025-11-21 13:27:59,710 - INFO - Iniciando ETL em lote...
+2025-11-21 13:27:59,721 - INFO - Conexão com SQL Server estabelecida
+2025-11-21 13:27:59,722 - INFO - Conexão com ClickHouse estabelecida
+2025-11-21 13:27:59,740 - INFO - Tabela 'dim_produto' criada/verificada
+2025-11-21 13:27:59,841 - INFO - Total de registros (Skus): 18725
+2025-11-21 13:27:59,915 - INFO - Lote extraído: 18725 registros (offset 0)
+2025-11-21 13:27:59,934 - INFO - Transformações aplicadas
+2025-11-21 13:27:59,973 - ERROR - Erro na carga: [<class 'decimal.ConversionSyntax'>]
+2025-11-21 13:28:53,088 - INFO - Iniciando ETL em lote...
+2025-11-21 13:28:53,099 - INFO - Conexão com SQL Server estabelecida
+2025-11-21 13:28:53,100 - INFO - Conexão com ClickHouse estabelecida
+2025-11-21 13:28:53,103 - INFO - Tabela 'dim_produto' criada/verificada
+2025-11-21 13:28:53,199 - INFO - Total de registros (Skus): 18725
+2025-11-21 13:28:53,277 - INFO - Lote extraído: 18725 registros (offset 0)
+2025-11-21 13:28:53,296 - INFO - Transformações aplicadas (incluindo tratamento de custo)
+2025-11-21 13:28:53,360 - INFO - Registros carregados: 18725
+2025-11-21 13:28:53,361 - INFO - Acumulado: 18725 registros processados
+2025-11-21 13:28:53,363 - INFO - Verificação: 18725 registros na tabela
+2025-11-21 13:28:53,363 - INFO - ETL em lote concluído em 0:00:00.274929
+2025-11-21 13:28:53,363 - INFO - Total processado no ETL: 18725
+2025-11-21 13:28:53,364 - INFO - Total presente no ClickHouse: 18725

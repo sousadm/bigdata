@@ -1,0 +1,35 @@
+{
+  "name": "dim_produto",
+  "config": {
+    "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
+    "tasks.max": "1",
+
+    "topics": "dim_produto",
+
+    "hostname": "clickhouse",
+    "port": "8123",
+    "database": "default",
+    "table": "dim_produto",
+
+    "username": "admin",
+    "password": "admin123",
+
+    "clickhouse.user": "admin",
+    "clickhouse.password": "admin123",
+
+    "insert.mode": "upsert",
+    "pk.mode": "record_key",
+    "primary.key": "id",
+
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+
+    "errors.tolerance": "all",
+    "errors.log.enable": "true",
+
+    "clickhouse.settings": "date_time_input_format=best_effort"
+  }
+}
+
