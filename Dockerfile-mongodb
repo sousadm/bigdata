@@ -1,0 +1,11 @@
+FROM confluentinc/cp-kafka-connect:7.4.0
+
+# Instalar conectores via Confluent Hub
+RUN confluent-hub install --no-prompt debezium/debezium-connector-sqlserver:2.4.0
+RUN confluent-hub install --no-prompt clickhouse/clickhouse-kafka-connect:latest
+RUN confluent-hub install --no-prompt mongodb/kafka-connect-mongodb:1.11.0
+
+# Criar diretórios necessários
+RUN mkdir -p /usr/share/confluent-hub-components
+
+USER appuser

@@ -19,15 +19,17 @@ ORDER BY id;
 ✅ 1. Criar o tópico (SEM ESTAR dentro do container primeiro)	
 
 docker exec -it kafka bash
-kafka-topics --bootstrap-server kafka:9092 --create --topic dim_produto --partitions 1 --replication-factor 1
+kafka-topics --bootstrap-server kafka:9092 --create --topic dim-produto --partitions 1 --replication-factor 1
+kafka-topics --bootstrap-server kafka:9092 --create --topic mongo-produto --partitions 1 --replication-factor 1
 
 kafka-topics --bootstrap-server kafka:9092 --list
 
 
 ✅ 🚀 Criar connector e submeter
 # Se estiver na mesma pasta do arquivo
-curl -X DELETE http://localhost:8083/connectors/dim_produto
-curl -X POST -H "Content-Type: application/json" --data @produto-connector.json http://localhost:8083/connectors
+curl -X POST -H "Content-Type: application/json" --data @produto-clickhouse-sink.json http://localhost:8083/connectors
+
+curl -X POST -H "Content-Type: application/json" --data @produto-mongodb-sink-v2.json http://localhost:8083/connectors
 
 {
   "name": "dim_produto",
@@ -63,6 +65,7 @@ curl -X POST -H "Content-Type: application/json" --data @produto-connector.json 
     "clickhouse.settings": "date_time_input_format=best_effort"
   }
 }
+
 
 
 ✅ 2. Testar envio de mensagem (producer) Ainda dentro do container:

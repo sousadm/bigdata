@@ -31,12 +31,22 @@ RUN mkdir -p /usr/share/java/clickhouse-kafka-connect && \
     unzip connector.zip && \
     rm connector.zip
 
+# ====================================================
+# MONGODB KAFKA CONNECTOR
+# ====================================================
+ENV MONGODB_CONNECTOR_VERSION=1.13.0
+RUN mkdir -p /usr/share/java/mongodb-kafka-connect && \
+    cd /usr/share/java/mongodb-kafka-connect && \
+    curl -fSL "https://repo1.maven.org/maven2/org/mongodb/kafka/mongo-kafka-connect/${MONGODB_CONNECTOR_VERSION}/mongo-kafka-connect-${MONGODB_CONNECTOR_VERSION}-all.jar" \
+    -o mongo-kafka-connect-${MONGODB_CONNECTOR_VERSION}-all.jar
+
 # Configurar o classpath para o Kafka Connect
 ENV CONNECT_PLUGIN_PATH="/usr/share/java,/usr/share/confluent-hub-components"
 
 # Verificar instalação
 RUN ls -la /usr/share/java/debezium-connector-sqlserver/ && \
     ls -la /usr/share/java/kafka/mssql-jdbc-*.jar && \
-    ls -la /usr/share/java/clickhouse-kafka-connect/
+    ls -la /usr/share/java/clickhouse-kafka-connect/ && \
+    ls -la /usr/share/java/mongodb-kafka-connect/
 
 USER appuser

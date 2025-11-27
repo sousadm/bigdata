@@ -37,6 +37,22 @@ services:
     networks:
       - bigdata-net
 
+  # ====================================================
+  # MongoDB
+  # ====================================================
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+    networks:
+      - bigdata-net
+
   # ==========================
   # CLICKHOUSE (Configuração Corrigida)
   # =======================
@@ -195,6 +211,8 @@ volumes:
   sqlserver_data:
   postgres_data:
   clickhouse_data:
+  mongo_data:
+    driver: local
 
 networks:
   bigdata-net:
