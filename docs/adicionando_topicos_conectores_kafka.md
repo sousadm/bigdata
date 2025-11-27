@@ -16,6 +16,11 @@ ENGINE = ReplacingMergeTree(data_carga)
 ORDER BY id;
 
 
+✅ 🚀 Criar CONNECTOR (CONSUMER) e submeter
+# Se estiver na mesma pasta do arquivo
+curl -X POST -H "Content-Type: application/json" --data @produto-clickhouse-sink.json http://localhost:8083/connectors
+curl -X POST -H "Content-Type: application/json" --data @produto-mongodb-sink-v2.json http://localhost:8083/connectors
+
 ✅ 1. Criar o tópico (SEM ESTAR dentro do container primeiro)	
 
 docker exec -it kafka bash
@@ -23,50 +28,6 @@ kafka-topics --bootstrap-server kafka:9092 --create --topic dim-produto --partit
 kafka-topics --bootstrap-server kafka:9092 --create --topic mongo-produto --partitions 1 --replication-factor 1
 
 kafka-topics --bootstrap-server kafka:9092 --list
-
-
-✅ 🚀 Criar connector e submeter
-# Se estiver na mesma pasta do arquivo
-curl -X POST -H "Content-Type: application/json" --data @produto-clickhouse-sink.json http://localhost:8083/connectors
-
-curl -X POST -H "Content-Type: application/json" --data @produto-mongodb-sink-v2.json http://localhost:8083/connectors
-
-{
-  "name": "dim_produto",
-  "config": {
-    "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
-    "tasks.max": "1",
-
-    "topics": "dim_produto",
-
-    "hostname": "clickhouse",
-    "port": "8123",
-    "database": "default",
-    "table": "dim_produto",
-
-    "username": "admin",
-    "password": "admin123",
-
-    "clickhouse.user": "admin",
-    "clickhouse.password": "admin123",
-
-    "insert.mode": "upsert",
-    "pk.mode": "record_key",
-    "primary.key": "id",
-
-    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
-    "value.converter.schemas.enable": "false",
-    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
-    "key.converter.schemas.enable": "false",
-
-    "errors.tolerance": "all",
-    "errors.log.enable": "true",
-
-    "clickhouse.settings": "date_time_input_format=best_effort"
-  }
-}
-
-
 
 ✅ 2. Testar envio de mensagem (producer) Ainda dentro do container:
 
