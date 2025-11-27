@@ -1,5 +1,5 @@
 {
-  "name": "dim_produto",
+  "name": "clickhouse-produto-connector",
   "config": {
     "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
     "tasks.max": "1",

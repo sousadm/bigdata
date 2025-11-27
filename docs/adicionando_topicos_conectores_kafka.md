@@ -19,7 +19,9 @@ ORDER BY id;
 ✅ 🚀 Criar CONNECTOR (CONSUMER) e submeter
 # Se estiver na mesma pasta do arquivo
 curl -X POST -H "Content-Type: application/json" --data @produto-clickhouse-sink.json http://localhost:8083/connectors
-curl -X POST -H "Content-Type: application/json" --data @produto-mongodb-sink-v2.json http://localhost:8083/connectors
+curl -X POST -H "Content-Type: application/json" --data @produto-mongodb-sink.json http://localhost:8083/connectors
+
+
 
 ✅ 1. Criar o tópico (SEM ESTAR dentro do container primeiro)	
 
