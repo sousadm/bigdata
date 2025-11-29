@@ -71,7 +71,7 @@ SELECT
     toUInt8(toWeek(dt)) as semana_ano,
     toUInt8(if(toDayOfWeek(dt) IN (1, 7), 1, 0)) as eh_final_semana
 FROM (
-    SELECT toDate('2024-01-01') + number as dt
+    SELECT toDate('2020-01-01') + number as dt
     FROM numbers(365 * 10) -- 10 anos de dados
 )
 WHERE dt <= today() + interval 2 year; -- Até um ano no futuro

@@ -8,9 +8,10 @@ import sys
 # Configuração de logging
 logging.basicConfig(
     level=logging.INFO,
+    # ATUALIZADO: Nome do arquivo de log
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler('etl_vendas.log'), 
+        logging.FileHandler('etl_vendedor.log'), 
         logging.StreamHandler(sys.stdout)
     ]
 )
@@ -57,35 +58,24 @@ class ClickHouseConnector:
 
 
 class ETLProductor: 
-    BATCH_SIZE = 50000 
+    BATCH_SIZE = 50000  # tamanho do lote padrão
     def __init__(self):
         self.sql = SQLServerConnector()
         self.ch = ClickHouseConnector()
 
     def create_table(self):
         query = """
-          CREATE TABLE default.fato_vendas
-          (
-              `id_venda` UInt64,
-              `numero_item` UInt16, 
-              `fk_id_cliente` UInt32,
-              `fk_id_vendedor` UInt32,
-              `fk_id_produto` UInt32,
-              `fk_tempo_id` UInt32,
-              `quantidade_vendida` Decimal(10, 4),
-              `valor_unitario` Decimal(10, 4),
-              `valor_desconto` Decimal(10, 4),
-              `valor_liquido` Decimal(10, 4),
-              `data_venda`DateTime,
-              `data_carga` DateTime DEFAULT now()
-          )
-          ENGINE = SummingMergeTree
-          PARTITION BY toYYYYMM(data_venda)
-          ORDER BY (fk_tempo_id, fk_id_cliente, fk_id_produto, id_venda, numero_item);
+        CREATE TABLE IF NOT EXISTS dim_vendedor (
+            id_funcionario UInt32,
+            nome String,
+            data_carga DateTime DEFAULT now()
+        ) ENGINE = MergeTree()
+        ORDER BY (id_funcionario)
+        PARTITION BY toYYYYMM(data_carga)
         """
         try:
             self.ch.client.execute(query)
-            logging.info("Tabela 'fato_vendas' criada/verificada")
+            logging.info("Tabela 'dim_vendedor' criada/verificada")
         except Exception as e:
             logging.error(f"Erro ao criar tabela: {e}")
             raise
@@ -95,65 +85,32 @@ class ETLProductor:
             batch_size = self.BATCH_SIZE
 
         try:
-            count_query = f"""
-                SELECT COUNT(*) AS total
-                FROM ASERP.dbo.PEDIDOS p 
-                INNER JOIN ASERP.dbo.PEDIDO_ITENS i ON p.PEDIDO = i.PEDIDO
-                    AND p.DATA_VENDA >= '2020-10-01'
-            """
-
+            # ATUALIZADO: Tabela de origem
+            count_query = """
+                          SELECT COUNT(*) AS total FROM ASERP.dbo.funcionario f 
+                          WHERE f.vendedor = 1 
+                            AND f.id_funcionario  > 0
+                      """
             total_rows = pd.read_sql(count_query, self.sql.conn).iloc[0]["total"]
             logging.info(f"Total de registros: {total_rows}")
 
             offset = 0
             while offset < total_rows:
+                # ATUALIZADO: Colunas e tabela de origem
                 query = f"""
-                          WITH CalculoBrutoTotal AS (
-                              SELECT
-                                  p.PEDIDO,
-                                  p.CLIENTE,
-                                  p.VENDEDOR,
-                                  p.DATA_VENDA,
-                                  p.DESCONTO AS desconto_total_pedido,
-                                  i.ITEM,
-                                  i.SKU,
-                                  i.QTD,
-                                  i.PRECO,
-                                  i.FRETE,
-                                  i.QTD * i.PRECO AS valor_bruto_item,
-                                  SUM(i.QTD * i.PRECO) OVER (PARTITION BY p.PEDIDO) AS valor_bruto_total_pedido
-                              FROM ASERP.dbo.PEDIDOS p 
-                              INNER JOIN ASERP.dbo.PEDIDO_ITENS i ON p.PEDIDO = i.PEDIDO
-                                  AND p.DATA_VENDA >= '2020-10-01'
-                          )
-                          SELECT 
-                              id_venda = T.PEDIDO,
-                              numero_item = T.ITEM,
-                              data_venda = T.DATA_VENDA,
-                              fk_id_cliente = T.CLIENTE,
-                              fk_id_vendedor = T.VENDEDOR,
-                              fk_id_produto = T.SKU,
-                              fk_tempo_id = CAST(FORMAT(T.DATA_VENDA, 'yyyyMMdd') AS INT),
-                              quantidade_vendida = T.QTD,
-                              valor_unitario = T.PRECO,
-                              valor_desconto = CAST(
-                                  CASE 
-                                      WHEN T.valor_bruto_total_pedido = 0 THEN 0 
-                                      ELSE 
-                                          (T.valor_bruto_item / T.valor_bruto_total_pedido) * T.desconto_total_pedido
-                                  END AS DECIMAL(18, 2)),
-                              valor_liquido = CAST(
-                                  T.valor_bruto_item - 
-                                  CASE 
-                                      WHEN T.valor_bruto_total_pedido = 0 THEN 0 
-                                      ELSE (T.valor_bruto_item / T.valor_bruto_total_pedido) * T.desconto_total_pedido
-                                  END AS DECIMAL(18, 2))
-                          FROM 
-                              CalculoBrutoTotal T
-                          ORDER BY 
-	                          id_venda, numero_item;
+                    SELECT
+                      f.id_funcionario,
+                      f.nome 
+                    FROM ASERP.dbo.funcionario f 
+                    WHERE f.vendedor = 1
+                      AND f.id_funcionario  > 0
+                    ORDER BY f.id_funcionario 
+                    OFFSET {offset} ROWS
+                    FETCH NEXT {batch_size} ROWS ONLY
                 """
                 df = pd.read_sql(query, self.sql.conn)
+                # Renomeando colunas (já feito no SELECT com o 'AS')
+                # df.columns = ['id_fornecedor', 'cpf_cnpj', 'razao_social', 'nome_fantasia', 'fone1']
                 logging.info(f"Lote extraído: {len(df)} registros (offset {offset})")
                 yield df
                 offset += batch_size
@@ -164,15 +121,14 @@ class ETLProductor:
 
     def transform(self, df):
         try:
-            df["data_venda"] = pd.to_datetime(df["data_venda"])
-            # Drop duplicates
-            #df = df.drop_duplicates(subset=["id"]) 
-            #df['custo'] = pd.to_numeric(df['custo'], errors='coerce')
-            #df['custo'] = df['custo'].fillna(0.0)
-            #df = df.fillna("")
-            # 3. Limpeza e padronização de strings (strip)
-            #df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
-            logging.info("Transformações aplicadas (incluindo tratamento de custo)")
+            # ATUALIZADO: Drop duplicates na coluna Fornecedor
+            df = df.drop_duplicates(subset=["id_funcionario"]) 
+            df = df.fillna("")
+
+            # Substituição do applymap removido
+            df = df.map(lambda x: x.strip() if isinstance(x, str) else x)
+
+            logging.info("Transformações aplicadas")
             return df
         except Exception as e:
             logging.error(f"Erro na transformação: {e}")
@@ -181,22 +137,8 @@ class ETLProductor:
     def load(self, df):
         try:
             data = df.to_dict("records")
-            self.ch.client.execute(
-                  """
-                  INSERT INTO fato_vendas (
-                    id_venda, 
-                    numero_item, 
-                    data_venda,
-                    fk_id_cliente, 
-                    fk_id_vendedor,
-                    fk_id_produto, 
-                    fk_tempo_id, 
-                    quantidade_vendida, 
-                    valor_unitario, 
-                    valor_desconto, 
-                    valor_liquido) VALUES""", 
-                  data
-            )
+            # ATUALIZADO: Tabela de destino e colunas
+            self.ch.client.execute("INSERT INTO dim_vendedor (id_funcionario, nome) VALUES", data)
             logging.info(f"Registros carregados: {len(data)}")
             return True
         except Exception as e:
@@ -205,7 +147,8 @@ class ETLProductor:
 
     def verify(self):
         try:
-            total = self.ch.client.execute("SELECT COUNT(*) FROM fato_vendas")[0][0]
+            # ATUALIZADO: Tabela de verificação
+            total = self.ch.client.execute("SELECT COUNT(*) FROM dim_vendedor")[0][0]
             logging.info(f"Verificação: {total} registros na tabela")
             return total
         except Exception as e:
@@ -258,6 +201,7 @@ class ETLProductor:
 
 
 if __name__ == "__main__":
+    # ATUALIZADO: Instancia a nova classe
     etl = ETLProductor() 
     ok = etl.run()
 
