@@ -21,7 +21,10 @@ ORDER BY id;
 curl -X POST -H "Content-Type: application/json" --data @produto-clickhouse-sink.json http://localhost:8083/connectors
 curl -X POST -H "Content-Type: application/json" --data @produto-mongodb-sink.json http://localhost:8083/connectors
 
-
+# Para verificar se o conector foi criado e está rodando:
+curl http://localhost:8083/connectors/clickhouse-produto-connector/status | jq
+# Ver configuração do conector (as variáveis estarão resolvidas)
+curl http://localhost:8083/connectors/clickhouse-produto-connector/config | jq
 
 ✅ 1. Criar o tópico (SEM ESTAR dentro do container primeiro)	
 

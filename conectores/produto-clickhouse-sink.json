@@ -11,11 +11,10 @@
     "database": "default",
     "table": "dim_produto",
 
-    "username": "admin",
-    "password": "admin123",
-
-    "clickhouse.user": "admin",
-    "clickhouse.password": "admin123",
+    "username": "${env:CLICKHOUSE_USER}",
+    "password": "${env:CLICKHOUSE_PASSWORD}",    
+    "clickhouse.user": "${env:CLICKHOUSE_USER}",
+    "clickhouse.password": "${env:CLICKHOUSE_PASSWORD}",
 
     "insert.mode": "upsert",
     "pk.mode": "record_key",

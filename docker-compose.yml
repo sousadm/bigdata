@@ -209,8 +209,15 @@ services:
       CLICKHOUSE_PORT: 8123
       CLICKHOUSE_USER: admin
       CLICKHOUSE_PASSWORD: admin123
-      KAFKA_TOPIC: dim_produto
       
+      # Variáveis MongoDB
+      MONGODB_HOST: mongodb
+      MONGODB_PORT: 27017
+      MONGODB_USER: admin
+      MONGODB_PASSWORD: admin123
+      MONGODB_DATABASE: sousa
+      MONGODB_COLLECTION: produto
+
     ports:
       - "8083:8083"
     volumes:

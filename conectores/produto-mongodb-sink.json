@@ -10,11 +10,10 @@
     "value.converter": "org.apache.kafka.connect.json.JsonConverter",
     "value.converter.schemas.enable": "false",
 
-    "connection.uri": "mongodb://admin:admin123@mongodb:27017",
     "connection.timeout.ms": "10000",
-    
-    "database": "sousa",
-    "collection": "produto",
+    "connection.uri": "mongodb://${env:MONGODB_USER}:${env:MONGODB_PASSWORD}@${env:MONGODB_HOST}:${env:MONGODB_PORT}",    
+    "database": "${env:MONGODB_DATABASE}",
+    "collection": "${env:MONGODB_COLLECTION}",
     
     "writemodel.strategy": "com.mongodb.kafka.connect.sink.writemodel.strategy.InsertOneDefaultStrategy",
     
