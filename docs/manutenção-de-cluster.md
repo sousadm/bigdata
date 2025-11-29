@@ -9,7 +9,8 @@ cat kafka-connect-error.log | tail -50
 
 2. Parar e remover apenas os serviços problemáticos:
 bash
-# Parar e remover serviços Kafka (mantendo bancos)
+# Parar e remover serviços Kafka e logs (mantendo bancos)
 docker-compose stop kafka kafka-connect kafka-rest-proxy kafka-ui zookeeper
-
 docker-compose rm -f kafka kafka-connect kafka-rest-proxy kafka-ui zookeeper
+docker-compose logs -f kafka kafka-connect kafka-rest-proxy kafka-ui zookeeper
+

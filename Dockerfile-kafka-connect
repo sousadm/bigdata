@@ -1,4 +1,4 @@
-FROM confluentinc/cp-kafka-connect:7.4.0
+FROM confluentinc/cp-kafka-connect:7.5.0
 
 USER root
 
@@ -28,7 +28,7 @@ ENV CLICKHOUSE_CONNECTOR_VERSION=1.0.7
 RUN mkdir -p /usr/share/java/clickhouse-kafka-connect && \
     cd /usr/share/java/clickhouse-kafka-connect && \
     curl -fSL "https://github.com/ClickHouse/clickhouse-kafka-connect/releases/download/v${CLICKHOUSE_CONNECTOR_VERSION}/clickhouse-kafka-connect-v${CLICKHOUSE_CONNECTOR_VERSION}.zip" -o connector.zip && \
-    unzip connector.zip && \
+    unzip -o connector.zip && \
     rm connector.zip
 
 # ====================================================

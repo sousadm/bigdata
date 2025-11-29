@@ -89,7 +89,7 @@ services:
   # KAFKA
   # ==========================
   kafka:
-    image: confluentinc/cp-kafka:7.4.0
+    image: confluentinc/cp-kafka:7.5.0
     container_name: kafka
     depends_on:
       zookeeper:
@@ -121,7 +121,7 @@ services:
   # ZOOKEEPER
   # ==========================
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.4.0
+    image: confluentinc/cp-zookeeper:7.5.0
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -158,7 +158,7 @@ services:
     networks:
       - bigdata-net
 
-  # ==========================
+# ==========================
   # KAFKA CONNECT (para CDC do SQL Server)
   # ==========================
   kafka-connect:
@@ -170,21 +170,47 @@ services:
       kafka:
         condition: service_healthy
     environment:
+      # Configurações básicas do Kafka Connect
       CONNECT_BOOTSTRAP_SERVERS: kafka:9092
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect
+      CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: compose-connect-group
+      
+      # Tópicos internos
       CONNECT_CONFIG_STORAGE_TOPIC: docker-connect-configs
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_OFFSET_STORAGE_TOPIC: docker-connect-offsets
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: 1
       CONNECT_STATUS_STORAGE_TOPIC: docker-connect-status
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: 1
+      
+      # Conversores
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
       CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+      
+      # Conversores internos (IMPORTANTE - estava faltando!)
+      CONNECT_INTERNAL_KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      CONNECT_INTERNAL_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
+      
+      # Plugin path
       CONNECT_PLUGIN_PATH: "/usr/share/java,/usr/share/confluent-hub-components"
+      
+      # Logs
       CONNECT_LOG4J_LOGGERS: "org.apache.zookeeper=ERROR,org.I0Itec.zkclient=ERROR,org.reflections=ERROR"
+      
+      # ===== CONFIG PROVIDER PARA VARIÁVEIS DE AMBIENTE =====
+      CONNECT_CONFIG_PROVIDERS: env
+      CONNECT_CONFIG_PROVIDERS_ENV_CLASS: org.apache.kafka.common.config.provider.EnvVarConfigProvider
+      
+      # ===== SUAS VARIÁVEIS CUSTOMIZADAS =====
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_PORT: 8123
+      CLICKHOUSE_USER: admin
+      CLICKHOUSE_PASSWORD: admin123
+      KAFKA_TOPIC: dim_produto
+      
     ports:
       - "8083:8083"
     volumes:
@@ -192,6 +218,7 @@ services:
       - ./kafka/connect-config:/etc/kafka-connect/config
     networks:
       - bigdata-net
+
 
   # ==========================
   # KAFKA UI (Opcional - para monitoramento)
