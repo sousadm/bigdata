@@ -1,0 +1,30 @@
+2025-12-04 08:47:42,454 - INFO - Iniciando ETL em lote...
+2025-12-04 08:47:42,494 - INFO - Conexão com SQL Server estabelecida
+2025-12-04 08:47:42,495 - INFO - Conexão com ClickHouse estabelecida
+2025-12-04 08:47:42,667 - INFO - Tabela 'dim_produto_grupo' criada/verificada
+2025-12-04 08:47:42,834 - INFO - Total de registros (Grupos): 179
+2025-12-04 08:47:42,836 - ERROR - Erro na extração em lote: Execution failed on sql '
+                SELECT 
+                    Grupo AS id,
+                    Nome AS descricao
+                FROM ASPROD.dbo.Grupos
+                OFFSET 0 ROWS
+                FETCH NEXT 50000 ROWS ONLY
+                ': ('42000', "[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Incorrect syntax near '0'. (102) (SQLExecDirectW)")
+2025-12-04 08:47:42,848 - INFO - Verificação: 0 registros na tabela
+2025-12-04 08:47:42,848 - INFO - ETL em lote concluído em 0:00:00.394428
+2025-12-04 08:47:42,848 - INFO - Total processado no ETL: 0
+2025-12-04 08:47:42,848 - INFO - Total presente no ClickHouse: 0
+2025-12-04 08:54:08,537 - INFO - Iniciando ETL em lote...
+2025-12-04 08:54:08,547 - INFO - Conexão com SQL Server estabelecida
+2025-12-04 08:54:08,548 - INFO - Conexão com ClickHouse estabelecida
+2025-12-04 08:54:08,551 - INFO - Tabela 'dim_produto_grupo' criada/verificada
+2025-12-04 08:54:08,637 - INFO - Total de registros (Grupos): 179
+2025-12-04 08:54:08,641 - INFO - Lote extraído: 179 registros (offset 0)
+2025-12-04 08:54:08,643 - INFO - Transformações aplicadas
+2025-12-04 08:54:08,655 - INFO - Registros carregados: 179
+2025-12-04 08:54:08,655 - INFO - Acumulado: 179 registros processados
+2025-12-04 08:54:08,657 - INFO - Verificação: 179 registros na tabela
+2025-12-04 08:54:08,657 - INFO - ETL em lote concluído em 0:00:00.120570
+2025-12-04 08:54:08,657 - INFO - Total processado no ETL: 179
+2025-12-04 08:54:08,657 - INFO - Total presente no ClickHouse: 179

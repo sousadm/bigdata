@@ -1,0 +1,150 @@
+2025-12-08 07:39:37,056 - INFO - Anonimização ATIVADA - Método: generic
+2025-12-08 07:39:37,056 - INFO - Iniciando ETL em lote...
+2025-12-08 07:39:37,096 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:39:37,097 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:39:37,270 - INFO - Total de registros: 304
+2025-12-08 07:39:37,273 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:39:37,278 - INFO - Anonimização aplicada com método: generic
+2025-12-08 07:39:37,278 - INFO - Transformações aplicadas
+2025-12-08 07:39:37,297 - ERROR - Erro na carga: Code: 60.
+DB::Exception: Table default.dim_vendedor does not exist. Stack trace:
+
+0. DB::Exception::Exception(DB::Exception::MessageMasked&&, int, bool) @ 0x000000000c6251d7 in /usr/bin/clickhouse
+1. DB::Exception::Exception<String, String>(int, FormatStringHelperImpl<std::type_identity<String>::type, std::type_identity<String>::type>, String&&, String&&) @ 0x0000000007136d07 in /usr/bin/clickhouse
+2. DB::IDatabase::getTable(String const&, std::shared_ptr<DB::Context const>) const @ 0x00000000114b48b9 in /usr/bin/clickhouse
+3. DB::DatabaseCatalog::getTableImpl(DB::StorageID const&, std::shared_ptr<DB::Context const>, std::optional<DB::Exception>*) const @ 0x00000000116e4e88 in /usr/bin/clickhouse
+4. DB::DatabaseCatalog::getTable(DB::StorageID const&, std::shared_ptr<DB::Context const>) const @ 0x00000000116ee629 in /usr/bin/clickhouse
+5. DB::InterpreterInsertQuery::getTable(DB::ASTInsertQuery&) @ 0x0000000011ea3b72 in /usr/bin/clickhouse
+6. DB::InterpreterInsertQuery::execute() @ 0x0000000011ea6f05 in /usr/bin/clickhouse
+7. DB::executeQueryImpl(char const*, char const*, std::shared_ptr<DB::Context>, bool, DB::QueryProcessingStage::Enum, DB::ReadBuffer*) @ 0x00000000122c98a8 in /usr/bin/clickhouse
+8. DB::executeQuery(String const&, std::shared_ptr<DB::Context>, bool, DB::QueryProcessingStage::Enum) @ 0x00000000122c5015 in /usr/bin/clickhouse
+9. DB::TCPHandler::runImpl() @ 0x0000000013140ff9 in /usr/bin/clickhouse
+10. DB::TCPHandler::run() @ 0x00000000131533d9 in /usr/bin/clickhouse
+11. Poco::Net::TCPServerConnection::start() @ 0x0000000015b4dc74 in /usr/bin/clickhouse
+12. Poco::Net::TCPServerDispatcher::run() @ 0x0000000015b4ee71 in /usr/bin/clickhouse
+13. Poco::PooledThread::run() @ 0x0000000015c85aa7 in /usr/bin/clickhouse
+14. Poco::ThreadImpl::runnableEntry(void*) @ 0x0000000015c83d7c in /usr/bin/clickhouse
+15. ? @ 0x00007f7797291609 in ?
+16. ? @ 0x00007f77971b6353 in ?
+
+2025-12-08 07:40:15,120 - INFO - Anonimização ATIVADA - Método: generic
+2025-12-08 07:40:15,120 - INFO - Iniciando ETL em lote...
+2025-12-08 07:40:15,130 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:40:15,131 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:40:15,150 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:40:15,243 - INFO - Total de registros: 304
+2025-12-08 07:40:15,245 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:40:15,247 - INFO - Anonimização aplicada com método: generic
+2025-12-08 07:40:15,247 - INFO - Transformações aplicadas
+2025-12-08 07:40:15,261 - INFO - Registros carregados: 304
+2025-12-08 07:40:15,262 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:40:15,263 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:40:15,264 - INFO - ETL em lote concluído em 0:00:00.143362
+2025-12-08 07:40:15,264 - INFO - Total processado no ETL: 304
+2025-12-08 07:40:15,264 - INFO - Total presente no ClickHouse: 304
+2025-12-08 07:41:41,674 - INFO - Anonimização ATIVADA - Método: generic
+2025-12-08 07:41:41,674 - INFO - Iniciando ETL em lote...
+2025-12-08 07:41:41,684 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:41:41,685 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:41:41,702 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:41:41,790 - INFO - Total de registros: 304
+2025-12-08 07:41:41,791 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:41:41,793 - INFO - Anonimização aplicada com método: generic
+2025-12-08 07:41:41,794 - INFO - Transformações aplicadas
+2025-12-08 07:41:41,805 - INFO - Registros carregados: 304
+2025-12-08 07:41:41,805 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:41:41,807 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:41:41,807 - INFO - ETL em lote concluído em 0:00:00.132863
+2025-12-08 07:41:41,807 - INFO - Total processado no ETL: 304
+2025-12-08 07:41:41,807 - INFO - Total presente no ClickHouse: 304
+2025-12-08 07:42:13,208 - INFO - Anonimização ATIVADA - Método: generic
+2025-12-08 07:42:13,208 - INFO - Iniciando ETL em lote...
+2025-12-08 07:42:13,219 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:42:13,220 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:42:13,239 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:42:13,339 - INFO - Total de registros: 304
+2025-12-08 07:42:13,341 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:42:13,343 - INFO - Anonimização aplicada com método: generic
+2025-12-08 07:42:13,343 - INFO - Transformações aplicadas
+2025-12-08 07:42:13,356 - INFO - Registros carregados: 304
+2025-12-08 07:42:13,356 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:42:13,358 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:42:13,358 - INFO - ETL em lote concluído em 0:00:00.149759
+2025-12-08 07:42:13,358 - INFO - Total processado no ETL: 304
+2025-12-08 07:42:13,358 - INFO - Total presente no ClickHouse: 304
+2025-12-08 07:43:54,717 - INFO - Anonimização ATIVADA - Método: mask
+2025-12-08 07:43:54,717 - INFO - Iniciando ETL em lote...
+2025-12-08 07:43:54,727 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:43:54,729 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:43:54,747 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:43:54,844 - INFO - Total de registros: 304
+2025-12-08 07:43:54,846 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:43:54,847 - INFO - Anonimização aplicada com método: mask
+2025-12-08 07:43:54,847 - INFO - Transformações aplicadas
+2025-12-08 07:43:54,861 - INFO - Registros carregados: 304
+2025-12-08 07:43:54,861 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:43:54,863 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:43:54,863 - INFO - ETL em lote concluído em 0:00:00.145910
+2025-12-08 07:43:54,863 - INFO - Total processado no ETL: 304
+2025-12-08 07:43:54,863 - INFO - Total presente no ClickHouse: 304
+2025-12-08 07:46:43,149 - INFO - Anonimização ATIVADA - Método: mask
+2025-12-08 07:46:43,149 - INFO - Iniciando ETL em lote...
+2025-12-08 07:46:43,160 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:46:43,161 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:46:43,182 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:46:43,281 - INFO - Total de registros: 304
+2025-12-08 07:46:43,283 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:46:43,285 - INFO - Anonimização aplicada com método: mask
+2025-12-08 07:46:43,285 - INFO - Transformações aplicadas
+2025-12-08 07:46:43,296 - INFO - Registros carregados: 304
+2025-12-08 07:46:43,296 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:46:43,298 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:46:43,298 - INFO - ETL em lote concluído em 0:00:00.148556
+2025-12-08 07:46:43,298 - INFO - Total processado no ETL: 304
+2025-12-08 07:46:43,298 - INFO - Total presente no ClickHouse: 304
+2025-12-08 07:48:52,281 - INFO - Anonimização ATIVADA - Método: mask
+2025-12-08 07:48:52,281 - INFO - Iniciando ETL em lote...
+2025-12-08 07:48:52,291 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:48:52,292 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:48:52,311 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:48:52,412 - INFO - Total de registros: 304
+2025-12-08 07:48:52,413 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:48:52,415 - INFO - Anonimização aplicada com método: mask
+2025-12-08 07:48:52,415 - INFO - Transformações aplicadas
+2025-12-08 07:48:52,427 - INFO - Registros carregados: 304
+2025-12-08 07:48:52,427 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:48:52,430 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:48:52,430 - INFO - ETL em lote concluído em 0:00:00.149016
+2025-12-08 07:48:52,430 - INFO - Total processado no ETL: 304
+2025-12-08 07:48:52,430 - INFO - Total presente no ClickHouse: 304
+2025-12-08 07:53:03,640 - INFO - Anonimização ATIVADA - Método: vendedor
+2025-12-08 07:53:03,640 - INFO - Iniciando ETL em lote...
+2025-12-08 07:53:03,650 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:53:03,651 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:53:03,714 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:53:03,809 - INFO - Total de registros: 304
+2025-12-08 07:53:03,811 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:53:03,812 - INFO - Anonimização aplicada com método: vendedor
+2025-12-08 07:53:03,812 - INFO - Transformações aplicadas
+2025-12-08 07:53:03,824 - INFO - Registros carregados: 304
+2025-12-08 07:53:03,824 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:53:03,826 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:53:03,826 - INFO - ETL em lote concluído em 0:00:00.186169
+2025-12-08 07:53:03,826 - INFO - Total processado no ETL: 304
+2025-12-08 07:53:03,826 - INFO - Total presente no ClickHouse: 304
+2025-12-08 07:57:35,668 - INFO - Anonimização ATIVADA - Método: vendedor
+2025-12-08 07:57:35,668 - INFO - Iniciando ETL em lote...
+2025-12-08 07:57:35,678 - INFO - Conexão com SQL Server estabelecida
+2025-12-08 07:57:35,679 - INFO - Conexão com ClickHouse estabelecida
+2025-12-08 07:57:35,738 - INFO - Tabela 'dim_vendedor' criada/verificada
+2025-12-08 07:57:35,832 - INFO - Total de registros: 304
+2025-12-08 07:57:35,834 - INFO - Lote extraído: 304 registros (offset 0)
+2025-12-08 07:57:35,835 - INFO - Anonimização aplicada com método: vendedor
+2025-12-08 07:57:35,835 - INFO - Nomes duplicados diferenciados: 40
+2025-12-08 07:57:35,835 - INFO - Transformações aplicadas
+2025-12-08 07:57:35,847 - INFO - Registros carregados: 304
+2025-12-08 07:57:35,848 - INFO - Acumulado: 304 registros processados
+2025-12-08 07:57:35,850 - INFO - Verificação: 304 registros na tabela
+2025-12-08 07:57:35,850 - INFO - ETL em lote concluído em 0:00:00.181995
+2025-12-08 07:57:35,850 - INFO - Total processado no ETL: 304
+2025-12-08 07:57:35,850 - INFO - Total presente no ClickHouse: 304
