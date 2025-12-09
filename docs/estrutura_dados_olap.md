@@ -78,32 +78,95 @@ WHERE dt <= today() + interval 2 year; -- Até um ano no futuro
 
 
 
-2. Dimensão Cliente
-
-CREATE TABLE dim_cliente
+CREATE TABLE default.fato_vendas
 (
-    cliente_id UInt32,
-    tipo_cliente Enum8('FISICA' = 1, 'JURIDICA' = 2),
-    -- Campos específicos PF
-    cpf String,
-    data_nascimento Date,
-    genero Enum8('M' = 1, 'F' = 2, 'O' = 3),
-    
-    -- Campos específicos PJ
-    cnpj String,
-    razao_social String,
-    nome_fantasia String,
-    porte_empresa Enum8('ME' = 1, 'EPP' = 2, 'MEDIA' = 3, 'GRANDE' = 4),
-    setor_atuacao String,
-    data_abertura Date,
-    
-    -- Campos comuns
-    nome_completo String,
-    email String,
-    telefone String,
-    data_cadastro Date,
-    segmento String,
-    categoria_id UInt32
+    `id_venda` UInt64,
+    `numero_item` UInt16,
+    `fk_id_cliente` UInt32,
+    `fk_id_vendedor` UInt32,
+    `fk_id_produto` UInt32,
+    `fk_tempo_id` UInt32,`quantidade_vendida` Decimal(10,4),
+    `valor_unitario` Decimal(10, 4),
+    `valor_desconto` Decimal(10, 4),
+    `valor_liquido` Decimal(10, 4),
+    `data_venda` DateTime,
+    `data_carga` DateTime DEFAULT now()
 )
-ENGINE = MergeTree()
-ORDER BY (cliente_id, tipo_cliente);
+ENGINE = SummingMergeTree
+PARTITION BY toYYYYMM(data_venda)
+ORDER BY (fk_tempo_id,
+ fk_id_cliente,
+ fk_id_produto,
+ id_venda,
+ numero_item)
+SETTINGS index_granularity = 8192;
+
+
+CREATE TABLE default.dim_cliente
+(
+    `id_cliente` UInt32,
+    `cpf_cnpj` String,
+    `nome_fantasia` String,
+    `razao_social` String,
+    `data_carga` DateTime DEFAULT now()
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(data_carga)
+ORDER BY id_cliente
+SETTINGS index_granularity = 8192;
+
+
+
+CREATE TABLE default.dim_fornecedor
+(
+    `id_fornecedor` UInt32,
+    `cpf_cnpj` String,
+    `razao_social` String,
+    `nome_fantasia` String,
+    `fone1` String,
+    `data_carga` DateTime DEFAULT now()
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(data_carga)
+ORDER BY id_fornecedor
+SETTINGS index_granularity = 8192;
+
+
+
+CREATE TABLE default.dim_produto
+(
+    `id` UInt32,
+    `descricao` String,
+    `unidade` String,
+    `custo` Decimal(10, 4),
+    `data_carga` DateTime DEFAULT now()
+)
+ENGINE = ReplacingMergeTree
+ORDER BY id
+SETTINGS index_granularity = 8192;
+
+
+
+CREATE TABLE default.dim_usuario
+(
+    `username` String,
+    `password` String,
+    `email` String,
+    `data_carga` DateTime DEFAULT now()
+)
+ENGINE = ReplacingMergeTree
+ORDER BY username
+SETTINGS index_granularity = 8192;
+
+
+
+CREATE TABLE default.dim_vendedor
+(
+    `id_vendedor` UInt32,
+    `nome` String,
+    `data_carga` DateTime DEFAULT now()
+)
+ENGINE = MergeTree
+PARTITION BY toYYYYMM(data_carga)
+ORDER BY id_vendedor
+SETTINGS index_granularity = 8192;

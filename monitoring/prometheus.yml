@@ -1,0 +1,15 @@
+# prometheus.yml
+global:
+  scrape_interval: 15s # Puxa métricas a cada 15 segundos
+
+scrape_configs:
+  # Monitoramento do próprio Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Monitoramento do Node Exporter (para métricas do host)
+  - job_name: 'node_exporter'
+    static_configs:
+      # O nome do serviço no Docker Compose é "node_exporter"
+      - targets: ['node_exporter:9100']
