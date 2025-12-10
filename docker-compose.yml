@@ -258,4 +258,4 @@ volumes:
 
 networks:
   bigdata-net:
-    driver: bridge
+    external: true  # Manualmente (compartilhamento) > docker network create bigdata-net
